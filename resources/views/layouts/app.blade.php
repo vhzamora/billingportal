@@ -6,43 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Portal de Facturación') - ISSABEL Billing</title>
     
-    @php($hasViteManifest = file_exists(public_path('build/manifest.json')))
-    @php($viteHot = file_exists(storage_path('framework/vite.hot')))
-    @if($hasViteManifest || $viteHot)
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <!-- Tailwind CSS CDN (fallback) -->
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.10/dist/tailwind.min.css" rel="stylesheet">
-        <!-- Tailwind Play CDN para cargar utilidades sin build -->
-        <script src="https://cdn.tailwindcss.com"></script>
-    @endif
-    
-    <!-- Estilos mínimos para clases personalizadas usadas en vistas (equivalentes a nuestras utilidades) -->
-    @unless($hasViteManifest)
-    <style>
-      /* Fallback básico si Tailwind no cargara */
-      html, body { height: 100%; }
-      body { background-color: #f9fafb; color: #111827; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
-      .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; transition: background-color .2s, color .2s; display:inline-flex; align-items:center; }
-      .btn-primary { background-color: #2563eb; color: #fff; }
-      .btn-primary:hover { background-color: #1d4ed8; }
-      .btn-secondary { background-color: #e5e7eb; color: #111827; }
-      .btn-secondary:hover { background-color: #d1d5db; }
-      .btn-danger { background-color: #dc2626; color: #fff; }
-      .btn-danger:hover { background-color: #b91c1c; }
-      .card { background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border: 1px solid #e5e7eb; }
-      .input { width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; }
-      .input:focus { outline: 2px solid #3b82f6; outline-offset: 2px; border-color: #3b82f6; }
-      /* Layout de respaldo */
-      #sidebar { position: fixed; inset: 0 auto 0 0; width: 16rem; background: #1f2937; color: #e5e7eb; display: none; }
-      @media (min-width: 1024px) { #sidebar { display: flex; flex-direction: column; } #main { padding-left: 16rem; } }
-      #sidebar .brand { background:#111827; height:4rem; display:flex; align-items:center; padding: 0 1rem; }
-      #sidebar nav { padding: 1rem 0.5rem; }
-      #sidebar nav a { display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.5rem; border-radius:0.375rem; color:#d1d5db; text-decoration:none; }
-      #sidebar nav a:hover { background:#374151; color:#fff; }
-      #topbar { position: sticky; top:0; z-index:40; height:4rem; background:#fff; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); display:flex; align-items:center; }
-    </style>
-    @endunless
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     @livewireStyles
 </head>
