@@ -1,0 +1,45 @@
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# PHP tools caches
+.phpactor.json
+.phpunit.result.cache
+/.phpunit.cache
+
+# Editors/IDE
+/.fleet
+/.idea
+/.vscode
+/.nova
+/.zed
+
+# Composer/NPM
+/vendor
+/node_modules
+
+# Laravel specific
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Misc
+/auth.json
+Homestead.json
+Homestead.yaml
