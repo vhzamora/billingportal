@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('cdr_simulado', function (Blueprint $table) {
             // Estructura exacta de ISSABEL CDR
-            $table->datetime('calldate')->default('0000-00-00 00:00:00');
+            // MySQL strict mode (NO_ZERO_DATE) rejects '0000-00-00 00:00:00' as default
+            // We store real call dates, so no default is needed
+            $table->dateTime('calldate');
             $table->string('clid', 80)->default('');
             $table->string('src', 80)->default('');
             $table->string('dst', 80)->default('');
