@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\ClienteDashboardController;
 use App\Http\Controllers\Admin\DestinoDesconocidoController;
 use App\Http\Controllers\Admin\ReprocesamientoController;
 use App\Http\Controllers\Admin\ClienteTarifaEspecialController;
+use App\Http\Controllers\Admin\FacturaController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +19,23 @@ Route::get('/', function () {
 // Admin Routes (Sin autenticación por ahora)
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Facturas
+    Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
+    Route::get('/facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
+    Route::get('/facturas/{factura}/export-resumen', [FacturaController::class, 'exportResumen'])->name('facturas.export.resumen');
+    Route::get('/facturas/{factura}/export-detalle', [FacturaController::class, 'exportDetalle'])->name('facturas.export.detalle');
+
+    // Atajo para generar facturas (opcional)
+    Route::post('/facturas/generar', function() {
+        $año = request('año', now()->year);
+        $mes = request('mes', now()->month);
+        $clienteId = request('cliente_id');
+        $params = ['--año' => $año, '--mes' => $mes];
+        if ($clienteId) $params['--cliente_id'] = $clienteId;
+        Artisan::call('facturas:generar', $params);
+        return back()->with('status', "Generación ejecutada:\n".Artisan::output());
+    })->name('facturas.generar');
 
     // Dashboard de cliente y exportaciones
     Route::get('/clientes/{cliente}/dashboard', [ClienteDashboardController::class, 'dashboard'])->name('cliente.dashboard');
@@ -61,7 +80,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Reprocesamiento manual
     Route::get('/reproceso', [ReprocesamientoController::class, 'form'])->name('reproceso.form');
     Route::post('/reproceso', [ReprocesamientoController::class, 'run'])->name('reproceso.run');
-
-    // Placeholders restantes
-    Route::get('/facturas', function() { return 'Facturas - Próximamente'; })->name('facturas.index');
 });

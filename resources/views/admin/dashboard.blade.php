@@ -5,148 +5,160 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Estadísticas principales -->
+    <!-- KPIs -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- Total Clientes -->
-        <div class="card p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-md bg-primary-500 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Total Clientes</dt>
-                        <dd class="text-lg font-medium text-gray-900">{{ $stats['total_clientes'] }}</dd>
-                    </dl>
-                </div>
+        <!-- Clientes activos -->
+        <div class="card overflow-hidden">
+            <div class="px-4 py-3 bg-blue-600 text-white flex items-center justify-between">
+                <span class="text-xs font-semibold tracking-wider uppercase">Clientes activos</span>
+                <svg class="h-5 w-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1m-4 6v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2h8zm1-10a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900">{{ $stats['total_clientes'] }}</div>
+                <div class="text-xs text-gray-500 mt-1">Clientes con CLIDs activos</div>
             </div>
         </div>
-
-        <!-- Total Tarifas -->
-        <div class="card p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-md bg-green-500 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Tarifas Activas</dt>
-                        <dd class="text-lg font-medium text-gray-900">{{ $stats['total_tarifas'] }}</dd>
-                    </dl>
-                </div>
+        <!-- Tarifas activas -->
+        <div class="card overflow-hidden">
+            <div class="px-4 py-3 bg-green-600 text-white flex items-center justify-between">
+                <span class="text-xs font-semibold tracking-wider uppercase">Tarifas activas</span>
+                <svg class="h-5 w-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900">{{ $stats['total_tarifas'] }}</div>
+                <div class="text-xs text-gray-500 mt-1">Destinos disponibles para rating</div>
             </div>
         </div>
-
-        <!-- Total CDRs -->
-        <div class="card p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-md bg-yellow-500 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Total Llamadas</dt>
-                        <dd class="text-lg font-medium text-gray-900">{{ $stats['total_cdrs'] }}</dd>
-                    </dl>
-                </div>
+        <!-- CDRs totales -->
+        <div class="card overflow-hidden">
+            <div class="px-4 py-3 bg-amber-500 text-white flex items-center justify-between">
+                <span class="text-xs font-semibold tracking-wider uppercase">CDRs totales</span>
+                <svg class="h-5 w-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2h-5m-2 0H6a2 2 0 00-2 2v6m16 0v4a2 2 0 01-2 2H9m11-6H4" />
+                </svg>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900">{{ $stats['total_cdrs'] }}</div>
+                <div class="text-xs text-gray-500 mt-1">Registros totales en el período</div>
             </div>
         </div>
+        <!-- CDRs contestados -->
+        <div class="card overflow-hidden">
+            <div class="px-4 py-3 bg-purple-600 text-white flex items-center justify-between">
+                <span class="text-xs font-semibold tracking-wider uppercase">CDRs contestados</span>
+                <svg class="h-5 w-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900">{{ $stats['cdrs_answered'] }}</div>
+                <div class="text-xs text-gray-500 mt-1">Llamadas con conversación</div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Llamadas Contestadas -->
+    <!-- Facturación y Utilidad del mes (combinado) -->
+    <div class="card p-6 w-full">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 w-full">
+            <h3 class="text-lg font-medium text-gray-900">Facturación y Utilidad del mes</h3>
+            <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
+        </div>
+        <div class="text-sm text-gray-600 mb-3 space-x-6 w-full">
+            <span>Total facturación: $ {{ number_format($totalMesImporte, 2) }}</span>
+            <span>Total utilidad: $ {{ number_format($totalMesUtilidad, 2) }}</span>
+        </div>
+        <div class="h-80 w-full">
+            <canvas id="chartFacturacionUtilidad" class="block w-full" style="width:100%"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Ten -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-md bg-purple-500 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Destinos (por facturación)</h3>
+            <div class="space-y-2">
+                @foreach($topDestinos as $d)
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="truncate pr-2">{{ $d->destino }}</div>
+                        <div class="text-gray-600">{{ (int)$d->llamadas }} llamadas · {{ (int)$d->minutos }} min · $ {{ number_format($d->importe,2) }}</div>
                     </div>
+                @endforeach
+                @if($topDestinos->isEmpty())
+                    <div class="text-sm text-gray-500">Sin datos.</div>
+                @endif
+            </div>
+        </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Clientes (por facturación)</h3>
+                <div class="text-sm text-gray-500">Participación %</div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="h-64">
+                    <canvas id="chartTopClientes" class="block w-full" style="width:100%"></canvas>
                 </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Llamadas Contestadas</dt>
-                        <dd class="text-lg font-medium text-gray-900">{{ $stats['cdrs_answered'] }}</dd>
-                    </dl>
+                <div class="space-y-2">
+                    @foreach($topClientes as $c)
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="truncate pr-2">{{ $c->cliente_nombre ?? ('Cliente #'.$c->cliente_id) }}</div>
+                            <div class="text-gray-600">$ {{ number_format($c->importe,2) }}</div>
+                        </div>
+                    @endforeach
+                    @if($topClientes->isEmpty())
+                        <div class="text-sm text-gray-500">Sin datos.</div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contenido adicional -->
+    <!-- Acciones rápidas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Estado del sistema -->
-        <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Estado del Sistema</h3>
-            <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600">Base de datos</span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Conectado
-                    </span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600">Procesamiento CDRs</span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        Simulado
-                    </span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600">Tarifas cargadas</span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        {{ $stats['total_tarifas'] }} activas
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acciones rápidas -->
         <div class="card p-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Acciones Rápidas</h3>
             <div class="space-y-3">
-                <a href="{{ route('admin.clientes.index') }}" class="btn btn-primary w-full justify-center">
-                    Gestionar Clientes
-                </a>
-                <a href="{{ route('admin.tarifas.index') }}" class="btn btn-secondary w-full justify-center">
-                    Configurar Tarifas
-                </a>
-                <a href="{{ route('admin.llamadas.index') }}" class="btn btn-secondary w-full justify-center">
-                    Ver Llamadas
-                </a>
+                <a href="{{ route('admin.clientes.index') }}" class="btn btn-primary w-full justify-center">Gestionar Clientes</a>
+                <a href="{{ route('admin.tarifas.index') }}" class="btn btn-secondary w-full justify-center">Configurar Tarifas</a>
+                <a href="{{ route('admin.llamadas.index') }}" class="btn btn-secondary w-full justify-center">Ver Llamadas</a>
+                <form action="{{ route('admin.facturas.generar') }}" method="post" class="w-full">
+                    @csrf
+                    <input type="hidden" name="año" value="{{ now()->year }}">
+                    <input type="hidden" name="mes" value="{{ now()->format('n') }}">
+                    <button type="submit" class="btn btn-primary w-full justify-center">Generar facturas del mes actual</button>
+                </form>
+                <a href="{{ route('admin.facturas.index') }}?año={{ now()->year }}&mes={{ now()->format('n') }}" class="btn btn-secondary w-full justify-center">Ver facturas del mes actual</a>
             </div>
         </div>
-    </div>
-
-    <!-- Información de la fase actual -->
-    <div class="card p-6 bg-blue-50 border border-blue-200">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-blue-800">FASE 1: Fundación y Estructura Base</h3>
-                <div class="mt-2 text-sm text-blue-700">
-                    <p>✅ Laravel configurado con dependencias</p>
-                    <p>✅ Migraciones y modelos creados</p>
-                    <p>✅ Seeders con datos de prueba</p>
-                    <p>✅ Layout base con diseño moderno</p>
-                    <p>🔄 Dashboard funcional</p>
-                </div>
+        <div class="card p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Estado del Sistema</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Base de datos</span><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Conectado</span></div>
+                <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Procesamiento CDRs</span><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Simulado</span></div>
+                <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Tarifas cargadas</span><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ $stats['total_tarifas'] }} activas</span></div>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script>
+(function(){
+  const facturacion = @json($facturacionSeries);
+  const utilidad = @json($utilidadSeries);
+  const ctx = document.getElementById('chartFacturacionUtilidad');
+  if (ctx) new Chart(ctx, { type: 'line', data: { datasets: [ { label: 'Facturación', data: facturacion, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.12)', tension: .25, fill: true }, { label: 'Utilidad', data: utilidad, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.12)', tension: .25, fill: true } ] }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, stacked: false, scales: { x: { type: 'time', time: { unit: 'day' } }, y: { beginAtZero: true } }, plugins: { legend: { display: true } } } });
+
+  const pieLabels = @json($topClientesLabels);
+  const pieData = @json($topClientesImporte);
+  const ctxPie = document.getElementById('chartTopClientes');
+  if (ctxPie) new Chart(ctxPie, { type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#2563eb','#16a34a','#f59e0b','#dc2626','#7c3aed','#059669','#d97706','#4f46e5','#ea580c','#0ea5e9'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
+})();
+</script>
+@endpush
 @endsection 

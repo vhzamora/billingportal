@@ -4,7 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Portal de Facturación') - ISSABEL Billing</title>
+    <title>@yield('title', 'Portal de Facturación') - InfoRegio VoIP Billing</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/inforegio_justlogo.png') }}?v=1" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/inforegio_justlogo.png') }}?v=1" />
+    <link rel="shortcut icon" href="{{ asset('images/inforegio_justlogo.png') }}?v=1" />
+    <link rel="apple-touch-icon" href="{{ asset('images/inforegio_justlogo.png') }}?v=1" />
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -18,15 +24,11 @@
                 <div class="brand flex h-16 flex-shrink-0 items-center bg-gray-900 px-4">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <div class="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                            </div>
+                            <img src="{{ asset('images/Logo_Inforegio_simple.png') }}" alt="InfoRegio" class="h-10 w-auto rounded-sm bg-white p-0.5" />
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-white">ISSABEL</p>
-                            <p class="text-xs text-gray-300">Billing Portal</p>
+                            <p class="text-sm font-semibold text-white">InfoRegio</p>
+                            <p class="text-xs text-gray-300">VoIP Billing Portal</p>
                         </div>
                     </div>
                 </div>
@@ -114,7 +116,7 @@
                     </div>
                     <div class="ml-4 flex items-center md:ml-6">
                         <div class="text-sm text-gray-500">
-                            Modo: <span class="font-medium text-blue-600">Administrador</span>
+                            Marca: <span class="font-medium text-blue-600">InfoRegio</span>
                         </div>
                     </div>
                 </div>
@@ -130,5 +132,6 @@
     </div>
     
     @livewireScripts
+    @stack('scripts')
 </body>
 </html> 
