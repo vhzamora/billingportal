@@ -61,18 +61,29 @@
         </div>
     </div>
 
-    <!-- Facturación y Utilidad del mes (combinado) -->
-    <div class="card p-6 w-full">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 w-full">
-            <h3 class="text-lg font-medium text-gray-900">Facturación y Utilidad del mes</h3>
-            <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
+    <!-- Gráficas: mitad izquierda (Facturación/Utilidad) y mitad derecha (Llamadas vs Completadas) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card p-6 w-full">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 w-full">
+                <h3 class="text-lg font-medium text-gray-900">Facturación y Utilidad del mes</h3>
+                <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
+            </div>
+            <div class="text-sm text-gray-600 mb-3 space-x-6 w-full">
+                <span>Total facturación: $ {{ number_format($totalMesImporte, 2) }}</span>
+                <span>Total utilidad: $ {{ number_format($totalMesUtilidad, 2) }}</span>
+            </div>
+            <div class="h-80 w-full">
+                <canvas id="chartFacturacionUtilidad" class="block w-full" style="width:100%"></canvas>
+            </div>
         </div>
-        <div class="text-sm text-gray-600 mb-3 space-x-6 w-full">
-            <span>Total facturación: $ {{ number_format($totalMesImporte, 2) }}</span>
-            <span>Total utilidad: $ {{ number_format($totalMesUtilidad, 2) }}</span>
-        </div>
-        <div class="h-80 w-full">
-            <canvas id="chartFacturacionUtilidad" class="block w-full" style="width:100%"></canvas>
+        <div class="card p-6 w-full">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 w-full">
+                <h3 class="text-lg font-medium text-gray-900">Llamadas realizadas vs completadas</h3>
+                <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
+            </div>
+            <div class="h-80 w-full">
+                <canvas id="chartLlamadas" class="block w-full" style="width:100%"></canvas>
+            </div>
         </div>
     </div>
 
@@ -153,6 +164,11 @@
   const utilidad = @json($utilidadSeries);
   const ctx = document.getElementById('chartFacturacionUtilidad');
   if (ctx) new Chart(ctx, { type: 'line', data: { datasets: [ { label: 'Facturación', data: facturacion, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.12)', tension: .25, fill: true }, { label: 'Utilidad', data: utilidad, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.12)', tension: .25, fill: true } ] }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, stacked: false, scales: { x: { type: 'time', time: { unit: 'day' } }, y: { beginAtZero: true } }, plugins: { legend: { display: true } } } });
+
+  const llamadas = @json($llamadasSeries);
+  const completadas = @json($completadasSeries);
+  const ctxL = document.getElementById('chartLlamadas');
+  if (ctxL) new Chart(ctxL, { type: 'bar', data: { datasets: [ { label: 'Realizadas', data: llamadas, backgroundColor: 'rgba(99,102,241,0.5)', borderColor: '#6366f1' }, { label: 'Completadas', data: completadas, backgroundColor: 'rgba(34,197,94,0.5)', borderColor: '#22c55e' } ] }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, scales: { x: { type: 'time', time: { unit: 'day' } }, y: { beginAtZero: true } } } });
 
   const pieLabels = @json($topClientesLabels);
   const pieData = @json($topClientesImporte);

@@ -71,7 +71,7 @@ class DashboardController extends Controller
         $totalMesImporte = $facturacionPorDia->sum('importe');
         $totalMesUtilidad = array_sum($utilidadPorDiaMap);
 
-        // Series para gráficas
+        // Series para gráficas (facturación/utilidad)
         $facturacionSeries = $facturacionPorDia->map(function ($r) {
             return [
                 'x' => $r->dia,
@@ -84,6 +84,22 @@ class DashboardController extends Controller
                 'y' => round((float) $v, 2),
             ];
         })->values();
+
+        // Series para gráficas (llamadas vs completadas) desde CDR simulado
+        $llamadasTotales = CdrSimulado::selectRaw('date(calldate) as dia, COUNT(*) as total')
+            ->whereBetween('calldate', [$inicioMes, $finMes])
+            ->groupBy('dia')
+            ->orderBy('dia')
+            ->get();
+        $llamadasCompletadas = CdrSimulado::selectRaw('date(calldate) as dia, COUNT(*) as total')
+            ->whereBetween('calldate', [$inicioMes, $finMes])
+            ->where('disposition', 'ANSWERED')
+            ->where('billsec', '>', 0)
+            ->groupBy('dia')
+            ->orderBy('dia')
+            ->get();
+        $llamadasSeries = $llamadasTotales->map(fn($r)=>['x'=>$r->dia, 'y'=>(int)$r->total])->values();
+        $completadasSeries = $llamadasCompletadas->map(fn($r)=>['x'=>$r->dia, 'y'=>(int)$r->total])->values();
 
         // Pie chart data for top clients
         $topClientesLabels = $topClientes->map(function ($r) {
@@ -105,6 +121,8 @@ class DashboardController extends Controller
             'utilidadSeries' => $utilidadSeries,
             'topClientesLabels' => $topClientesLabels,
             'topClientesImporte' => $topClientesImporte,
+            'llamadasSeries' => $llamadasSeries,
+            'completadasSeries' => $completadasSeries,
         ]);
     }
 }
