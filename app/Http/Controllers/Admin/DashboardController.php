@@ -55,11 +55,23 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        // Top clientes por facturación
-        $topClientes = LlamadaFacturada::selectRaw('cliente_id, SUM(costo_cliente) as importe, SUM(minutos_facturados) as minutos, COUNT(*) as llamadas')
+        // Top clientes por facturación (importe)
+        $topClientesFact = LlamadaFacturada::selectRaw('cliente_id, SUM(costo_cliente) as importe, SUM(minutos_facturados) as minutos, COUNT(*) as llamadas')
             ->whereBetween('fecha_llamada', [$inicioMes, $finMes])
             ->groupBy('cliente_id')
             ->orderByDesc('importe')
+            ->limit(10)
+            ->get()
+            ->map(function ($row) {
+                $row->cliente_nombre = optional(Cliente::find($row->cliente_id))->nombre;
+                return $row;
+            });
+
+        // Top clientes por minutos (tráfico)
+        $topClientesMin = LlamadaFacturada::selectRaw('cliente_id, SUM(minutos_facturados) as minutos, SUM(costo_cliente) as importe, COUNT(*) as llamadas')
+            ->whereBetween('fecha_llamada', [$inicioMes, $finMes])
+            ->groupBy('cliente_id')
+            ->orderByDesc('minutos')
             ->limit(10)
             ->get()
             ->map(function ($row) {
@@ -85,7 +97,7 @@ class DashboardController extends Controller
             ];
         })->values();
 
-        // Series para gráficas (llamadas vs completadas) desde CDR simulado
+        // Series llamadas vs completadas (CDR simulado)
         $llamadasTotales = CdrSimulado::selectRaw('date(calldate) as dia, COUNT(*) as total')
             ->whereBetween('calldate', [$inicioMes, $finMes])
             ->groupBy('dia')
@@ -101,28 +113,37 @@ class DashboardController extends Controller
         $llamadasSeries = $llamadasTotales->map(fn($r)=>['x'=>$r->dia, 'y'=>(int)$r->total])->values();
         $completadasSeries = $llamadasCompletadas->map(fn($r)=>['x'=>$r->dia, 'y'=>(int)$r->total])->values();
 
-        // Pie chart data for top clients
-        $topClientesLabels = $topClientes->map(function ($r) {
+        // Pie chart data for top clients by billing
+        $topClientesFactLabels = $topClientesFact->map(function ($r) {
             return $r->cliente_nombre ?: ('Cliente #'.$r->cliente_id);
         })->values();
-        $topClientesImporte = $topClientes->pluck('importe')->map(fn($v)=>(float)$v)->values();
+        $topClientesFactImporte = $topClientesFact->pluck('importe')->map(fn($v)=>(float)$v)->values();
+
+        // Pie chart data for top clients by minutes
+        $topClientesMinLabels = $topClientesMin->map(function ($r) {
+            return $r->cliente_nombre ?: ('Cliente #'.$r->cliente_id);
+        })->values();
+        $topClientesMinMinutos = $topClientesMin->pluck('minutos')->map(fn($v)=>(int)$v)->values();
 
         return view('admin.dashboard', [
             'stats' => $stats,
             'facturacionPorDia' => $facturacionPorDia,
             'utilidadPorDiaMap' => $utilidadPorDiaMap,
             'topDestinos' => $topDestinos,
-            'topClientes' => $topClientes,
+            'topClientesFact' => $topClientesFact,
+            'topClientesMin' => $topClientesMin,
             'totalMesImporte' => $totalMesImporte,
             'totalMesUtilidad' => $totalMesUtilidad,
             'inicioMes' => $inicioMes,
             'finMes' => $finMes,
             'facturacionSeries' => $facturacionSeries,
             'utilidadSeries' => $utilidadSeries,
-            'topClientesLabels' => $topClientesLabels,
-            'topClientesImporte' => $topClientesImporte,
             'llamadasSeries' => $llamadasSeries,
             'completadasSeries' => $completadasSeries,
+            'topClientesFactLabels' => $topClientesFactLabels,
+            'topClientesFactImporte' => $topClientesFactImporte,
+            'topClientesMinLabels' => $topClientesMinLabels,
+            'topClientesMinMinutos' => $topClientesMinMinutos,
         ]);
     }
 }

@@ -90,38 +90,118 @@
     <!-- Top Ten -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Destinos (por facturación)</h3>
-            <div class="space-y-2">
-                @foreach($topDestinos as $d)
-                    <div class="flex items-center justify-between text-sm">
-                        <div class="truncate pr-2">{{ $d->destino }}</div>
-                        <div class="text-gray-600">{{ (int)$d->llamadas }} llamadas · {{ (int)$d->minutos }} min · $ {{ number_format($d->importe,2) }}</div>
-                    </div>
-                @endforeach
-                @if($topDestinos->isEmpty())
-                    <div class="text-sm text-gray-500">Sin datos.</div>
-                @endif
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Top 10 Destinos (por facturación)</h3>
+                <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
+            </div>
+            @php
+                $totalDestinosImporte = max(1, (float) $topDestinos->sum('importe'));
+                $flagMap = [
+                    'México' => 'mx', 'Mexico' => 'mx',
+                    'España' => 'es', 'Spain' => 'es',
+                    'Estados Unidos' => 'us', 'USA' => 'us', 'EEUU' => 'us',
+                    'Canadá' => 'ca', 'Canada' => 'ca',
+                    'Reino Unido' => 'gb', 'United Kingdom' => 'gb', 'UK' => 'gb',
+                    'Francia' => 'fr', 'France' => 'fr',
+                    'Alemania' => 'de', 'Germany' => 'de',
+                    'Argentina' => 'ar',
+                    'Colombia' => 'co',
+                    'Chile' => 'cl',
+                    'Perú' => 'pe', 'Peru' => 'pe',
+                    'Brasil' => 'br', 'Brazil' => 'br',
+                    'Italia' => 'it', 'Italy' => 'it',
+                    'Japón' => 'jp', 'Japan' => 'jp',
+                ];
+            @endphp
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Destino</th>
+                            <th class="px-4 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <span class="sr-only">Llamadas</span>
+                                <svg class="inline-block h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </th>
+                            <th class="px-4 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <span class="sr-only">Minutos</span>
+                                <svg class="inline-block h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </th>
+                            <th class="px-4 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <span class="sr-only">Importe</span>
+                                <span class="inline-block text-gray-600">$</span>
+                            </th>
+                            <th class="px-4 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <span class="sr-only">% participación</span>
+                                <span class="inline-block text-gray-600">%</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 bg-white">
+                        @forelse($topDestinos as $d)
+                            @php($pct = round(((float)$d->importe / $totalDestinosImporte) * 100, 2))
+                            @php($iso = null)
+                            @foreach($flagMap as $name=>$code)
+                                @if(Str::contains($d->destino, $name))
+                                    @php($iso = $code)
+                                    @break
+                                @endif
+                            @endforeach
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 align-top">
+                                    <div class="flex items-center gap-2">
+                                        @if($iso)
+                                            <img src="https://flagcdn.com/24x18/{{ $iso }}.png" alt="{{ $iso }}" class="h-3 w-auto rounded-sm border border-gray-200" />
+                                        @else
+                                            <svg class="h-4 w-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 0c2.5 2.5 2.5 7.5 0 10M12 2c-2.5 2.5-2.5 7.5 0 10M2 12h20" />
+                                            </svg>
+                                        @endif
+                                        <span class="font-medium text-gray-900 truncate">{{ $d->destino }}</span>
+                                    </div>
+                                    <div class="mt-2 h-1.5 bg-gray-100 rounded">
+                                        <div class="h-1.5 rounded bg-blue-500" style="width: {{ $pct }}%"></div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-right text-gray-700">{{ (int)$d->llamadas }}</td>
+                                <td class="px-4 py-3 text-right text-gray-700">{{ (int)$d->minutos }}</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-900">$ {{ number_format($d->importe, 2) }}</td>
+                                <td class="px-4 py-3 text-right"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">{{ $pct }}%</span></td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-4 py-6 text-center text-sm text-gray-500">Sin datos.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
+        <!-- Top 10 Clientes (dos secciones) -->
         <div class="card p-6">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Clientes (por facturación)</h3>
-                <div class="text-sm text-gray-500">Participación %</div>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Top 10 Clientes</h3>
+                <div class="text-sm text-gray-500">{{ $inicioMes->format('M d') }} - {{ $finMes->format('M d') }}</div>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="h-64">
-                    <canvas id="chartTopClientes" class="block w-full" style="width:100%"></canvas>
+            <div class="grid grid-cols-1 gap-6">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="text-sm font-semibold text-gray-800">Facturación</div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartTopClientesFact"></canvas>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    @foreach($topClientes as $c)
-                        <div class="flex items-center justify-between text-sm">
-                            <div class="truncate pr-2">{{ $c->cliente_nombre ?? ('Cliente #'.$c->cliente_id) }}</div>
-                            <div class="text-gray-600">$ {{ number_format($c->importe,2) }}</div>
-                        </div>
-                    @endforeach
-                    @if($topClientes->isEmpty())
-                        <div class="text-sm text-gray-500">Sin datos.</div>
-                    @endif
+                <div class="pt-2 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="text-sm font-semibold text-gray-800">Tráfico (minutos)</div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartTopClientesMin"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,10 +250,33 @@
   const ctxL = document.getElementById('chartLlamadas');
   if (ctxL) new Chart(ctxL, { type: 'bar', data: { datasets: [ { label: 'Realizadas', data: llamadas, backgroundColor: 'rgba(99,102,241,0.5)', borderColor: '#6366f1' }, { label: 'Completadas', data: completadas, backgroundColor: 'rgba(34,197,94,0.5)', borderColor: '#22c55e' } ] }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, scales: { x: { type: 'time', time: { unit: 'day' } }, y: { beginAtZero: true } } } });
 
-  const pieLabels = @json($topClientesLabels);
-  const pieData = @json($topClientesImporte);
-  const ctxPie = document.getElementById('chartTopClientes');
-  if (ctxPie) new Chart(ctxPie, { type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#2563eb','#16a34a','#f59e0b','#dc2626','#7c3aed','#059669','#d97706','#4f46e5','#ea580c','#0ea5e9'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
+  const labelsFact = @json($topClientesFactLabels);
+  const dataFact = @json($topClientesFactImporte);
+  const labelsMin = @json($topClientesMinLabels);
+  const dataMin = @json($topClientesMinMinutos);
+
+  // Paleta compartida para asegurar el mismo orden de colores en ambas gráficas
+  const sharedPalette = ['#2563eb','#16a34a','#f59e0b','#dc2626','#7c3aed','#059669','#d97706','#4f46e5','#ea580c','#0ea5e9'];
+
+  const ctxPieFact = document.getElementById('chartTopClientesFact');
+  if (ctxPieFact) new Chart(ctxPieFact, {
+    type: 'pie',
+    data: {
+      labels: labelsFact,
+      datasets: [{ data: dataFact, backgroundColor: sharedPalette.slice(0, labelsFact.length) }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  const ctxPieMin = document.getElementById('chartTopClientesMin');
+  if (ctxPieMin) new Chart(ctxPieMin, {
+    type: 'pie',
+    data: {
+      labels: labelsMin,
+      datasets: [{ data: dataMin, backgroundColor: sharedPalette.slice(0, labelsMin.length) }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
 })();
 </script>
 @endpush
